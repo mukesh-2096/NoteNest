@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/dashboard';
 import Signup from './pages/signup';
 import Login from './pages/login';
-import Footer from './components/dashboardComponents/Footer';
+import Home from './pages/Home';
+
 
 export default function App() {
 	return (
@@ -15,11 +16,10 @@ export default function App() {
 									<Route path="/" element={<Dashboard />} />
 									<Route path="/signup" element={<Signup />} />
 									<Route path="/login" element={<Login />} />
+									<Route path="/home" element={<Home />} />
 								</Routes>
 							</main>
-
-							{/* Footer shown on all pages */}
-							<Footer />
+						
 						</div>
 			</BrowserRouter>
 	)

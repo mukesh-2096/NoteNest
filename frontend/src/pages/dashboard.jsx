@@ -3,6 +3,7 @@ import Header from "../components/dashboardComponents/Header";
 import Hero from "../components/dashboardComponents/Hero";
 import Features from "../components/dashboardComponents/Features";
 import CTA from "../components/dashboardComponents/CTA";
+import Footer from "../components/dashboardComponents/Footer";
 
 export default function Dashboard() {
   return (
@@ -23,6 +24,7 @@ export default function Dashboard() {
           <Features />
           <CTA />
         </div>
+        <Footer />
       </div>
     </>
   );
