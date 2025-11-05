@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 
 // Configure CORS using FRONTEND url from env
-const FRONTEND_URL = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '');
+const FRONTEND_URL = (process.env.FRONTEND_URL).replace(/\/$/, '');
 app.use(
   cors({
     origin: (origin, callback) => {
