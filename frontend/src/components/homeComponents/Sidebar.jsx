@@ -1,7 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../../utils/api";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    try {
+      logout();
+    } finally {
+      navigate('/login');
+    }
+  };
   return (
     <aside className="w-72 bg-[#1E293B]/80 backdrop-blur-xl border-r border-white/10 flex flex-col justify-between p-6">
       <div>
@@ -39,7 +49,7 @@ export default function Sidebar() {
             <p className="text-xs text-slate-400">mukesh@example.com</p>
           </div>
         </div>
-        <button className="mt-4 w-full bg-red-600/20 text-red-400 hover:bg-red-600/30 py-2 rounded-lg text-sm transition">
+        <button onClick={handleLogout} className="mt-4 w-full bg-red-600/20 text-red-400 hover:bg-red-600/30 py-2 rounded-lg text-sm transition">
           Logout
         </button>
       </div>

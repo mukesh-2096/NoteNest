@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { BACKEND } from "../utils/api";
 
 export default function Signup() {
   const [form, setForm] = useState({
@@ -12,10 +13,13 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,11 +32,33 @@ export default function Signup() {
       setError("Passwords do not match.");
       return;
     }
-    console.log("Signup data:", form);
+    // Frontend password validation (matches backend rules)
+    if (form.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+    if (!/[A-Z]/.test(form.password)) {
+      setError('Password must contain at least one uppercase letter');
+      return;
+    }
+    // call backend register
+    fetch(`${BACKEND}/api/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: form.name, email: form.email, password: form.password }),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Signup failed');
+        // After signup, ask user to login instead of auto-logging in
+        setSuccess('Account created successfully. Please log in.');
+        navigate('/login');
+      })
+      .catch((err) => setError(err.message || 'Signup failed'));
   };
 
   const handleGoogleSignIn = () => {
-    window.location.href = "/auth/google"; // replace with backend OAuth URL
+    window.location.href = `${BACKEND}/api/auth/google`;
   };
 
   return (
@@ -260,6 +286,13 @@ export default function Signup() {
                 )}
               </button>
             </div>
+
+            {/* Success message */}
+            {success && (
+              <div className="text-sm text-green-400 bg-green-900/20 p-2 rounded">
+                {success}
+              </div>
+            )}
 
             {/* Error message */}
             {error && (

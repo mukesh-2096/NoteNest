@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "../components/dashboardComponents/Footer";
+import { BACKEND, saveToken } from "../utils/api";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,12 +18,36 @@ export default function Login() {
       setError("Please enter both email and password.");
       return;
     }
-    console.log("Login attempt:", { email, password });
+    fetch(`${BACKEND}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Login failed');
+        saveToken(data.token);
+        navigate('/home');
+      })
+      .catch((err) => setError(err.message || 'Login failed'));
   };
 
+  const navigate = useNavigate();
   const handleGoogleSignIn = () => {
-    window.location.href = "/auth/google"; // your backend OAuth route
+    // redirect to backend OAuth starter endpoint
+    window.location.href = `${BACKEND}/api/auth/google`;
   };
+
+  // If Google redirected back with token in query, save and redirect to home
+  const location = useLocation();
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    if (token) {
+      saveToken(token);
+      navigate('/home');
+    }
+  }, [location, navigate]);
 
   return (
     <div

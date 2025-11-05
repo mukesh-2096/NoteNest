@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { getToken } from "../utils/api";
 import { Link } from "react-router-dom";
 import Sidebar from "../components/homeComponents/Sidebar";
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = getToken();
+    if (!token) navigate('/login');
+  }, [navigate]);
   return (
     <div className="min-h-screen flex bg-[#0F172A] text-white relative overflow-hidden"
       style={{
