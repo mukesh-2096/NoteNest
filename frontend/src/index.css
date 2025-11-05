@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Primary color utility used across components */
+:root {
+	--primary: #0C1892; /* dark blue accent */
+}
+
+.text-primary { color: var(--primary); }
+.bg-primary { background-color: var(--primary); }
+
+/* Dark theme defaults */
+html, body, #root {
+	background-color: #202020;
+	color: #ffffff;
+}
+
+/* Utility for a dark background block */
+.bg-dark { background-color: #202020; }
